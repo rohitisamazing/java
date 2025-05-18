@@ -1,0 +1,151 @@
+package employee;
+
+import java.io.*;
+import java.net.*;
+
+public class ChatClient {
+    public static void main(String[] args) {
+        String serverAddress = "localhost";
+        int serverPort = 1234;
+        Socket socket = null;	
+        try {
+            socket = new Socket(serverAddress, serverPort);
+            System.out.println("Connected to the server...");
+            Thread sendThread = new Thread(new MessageSender(socket));
+            Thread receiveThread = new Thread(new MessageReceiver(socket));
+            sendThread.start();
+            receiveThread.start();
+            sendThread.join();
+            receiveThread.join();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                    System.out.println("Disconnected from server.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+class MessageSender implements Runnable {
+    private final Socket socket;
+   public MessageSender(Socket socket) {
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try (
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))
+        ) {
+            String message;
+            while ((message = consoleReader.readLine()) != null) {
+                writer.write(message);
+                writer.newLine();
+                writer.flush();
+                if (message.equalsIgnoreCase("exit")) {
+                    socket.close(); 
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Sender stopped: " + e.getMessage());
+        }
+    }
+}
+class MessageReceiver implements Runnable {
+    private final Socket socket;
+
+    public MessageReceiver(Socket socket) {
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            String message;
+            while ((message = reader.readLine()) != null) {
+                System.out.println("Server: " + message);
+            }
+        } catch (IOException e) {
+            System.out.println("Receiver stopped: " + e.getMessage());
+        }
+    }
+}
+
+
+///////////////////////////////////////////////////////////////
+
+
+
+
+package employee;
+
+import java.io.*;
+import java.net.*;
+
+public class ChatServer {
+    public static void main(String[] args) {
+        int port = 1234;
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Server is waiting for client connection...");
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
+
+            Thread sendThread = new Thread(new AutoResponder(clientSocket));
+            sendThread.start();
+            sendThread.join();  // Wait for auto responder to complete
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class AutoResponder implements Runnable {
+    private final Socket socket;
+
+    public AutoResponder(Socket socket) {
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))
+        ) {
+            String message;
+            while ((message = reader.readLine()) != null) {
+                System.out.println("Client: " + message);
+                if (message.equalsIgnoreCase("hi")) {
+                    writer.write("hi how are you?");
+                } else if (message.equalsIgnoreCase("fine")) {
+                    writer.write("great, type exit to stop");
+                } else if (message.equalsIgnoreCase("exit")) {
+                    writer.write("Goodbye!");
+                    writer.newLine();
+                    writer.flush();
+                    break;  // Exit loop
+                } else {
+                    writer.write("I didn't understand that.");
+                }
+                writer.newLine();
+                writer.flush();
+            }
+        } catch (IOException e) {
+            System.out.println("Responder stopped: " + e.getMessage());
+        } finally {
+            try {
+                if (!socket.isClosed()) socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

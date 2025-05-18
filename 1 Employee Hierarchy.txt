@@ -1,0 +1,71 @@
+package practical;
+
+
+//Base class
+class Employee {
+ String name;
+ String dob;
+ int id;
+
+ public Employee(String name, String dob, int id) {
+     this.name = name;
+     this.dob = dob;
+     this.id = id;
+ }
+
+ public void display() {
+     System.out.println("Employee Name: " + name);
+     System.out.println("Date of Birth: " + dob);
+     System.out.println("Employee ID: " + id);
+ }
+}
+
+//Subclass Manager
+class Manager extends Employee {
+ double salary;
+
+ public Manager(String name, String dob, int id, double salary) {
+     super(name, dob, id);
+     this.salary = salary;
+ }
+
+ @Override
+ public void display() {
+     super.display();
+     System.out.println("Salary: " + salary);
+ }
+}
+
+//Subclass SalesManager
+class SalesManager extends Manager {
+ double commission;
+
+ public SalesManager(String name, String dob, int id, double salary, double commission) {
+     super(name, dob, id, salary);
+     this.commission = commission;
+ }
+
+ @Override
+ public void display() {
+     super.display();
+     System.out.println("Commission: " + commission);
+ }
+}
+
+//Main class
+public class Office {
+ public static void main(String[] args) {
+     System.out.println("---- Employee ----");
+     Employee emp = new Employee("Rahul Sharma", "15-08-1995", 101);
+     emp.display();
+
+     System.out.println("\n---- Manager ----");
+     Manager mgr = new Manager("Priya Singh", "10-01-1985", 102, 85000);
+     mgr.display();
+
+     System.out.println("\n---- Sales Manager ----");
+     SalesManager smgr = new SalesManager("Amit Verma", "20-05-1990", 103, 75000, 5000);
+     smgr.display();
+ }
+}
+

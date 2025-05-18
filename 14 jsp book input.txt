@@ -1,0 +1,86 @@
+<%@ page import="java.sql.*, java.io.*" %>
+<html>
+<head>
+    <title>Book Lookup (Oracle)</title>
+</head>
+<body>
+    <h2>Book Details Checker (Oracle)</h2>
+    <form method="post">
+        Enter Book ID: <input type="text" name="id" required>
+        <input type="submit" value="Check Book" />
+    </form>
+
+<%
+String id = request.getParameter("id");
+if (id != null && !id.trim().isEmpty()) {
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+        // Load Oracle JDBC driver
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+
+        // Oracle connection info
+        String url = "jdbc:oracle:thin:@localhost:1521:XE";
+        String username = "system";
+        String password = "admin";
+
+        conn = DriverManager.getConnection(url, username, password);
+
+        // Check if book exists
+        String checkQuery = "SELECT * FROM book WHERE id = ?";
+        stmt = conn.prepareStatement(checkQuery);
+        stmt.setString(1, id);
+        rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            out.println("<h3>Book Already Exists!</h3>");
+            out.println("<p><b>ID:</b> " + rs.getString("id") + "</p>");
+            out.println("<p><b>Title:</b> " + rs.getString("title") + "</p>");
+            out.println("<p><b>Author:</b> " + rs.getString("author") + "</p>");
+            out.println("<p><b>Price:</b> " + rs.getDouble("price") + "</p>");
+        } else {
+            // Insert new book
+            rs.close();
+            stmt.close();
+
+            String newTitle = "New Book Title";
+            String newAuthor = "Unknown Author";
+            double newPrice = 100.0;
+
+            String insertQuery = "INSERT INTO book (id, title, author, price) VALUES (?, ?, ?, ?)";
+            stmt = conn.prepareStatement(insertQuery);
+            stmt.setString(1, id);
+            stmt.setString(2, newTitle);
+            stmt.setString(3, newAuthor);
+            stmt.setDouble(4, newPrice);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                out.println("<h3>New book inserted successfully!</h3>");
+                out.println("<p><b>ID:</b> " + id + "</p>");
+                out.println("<p><b>Title:</b> " + newTitle + "</p>");
+                out.println("<p><b>Author:</b> " + newAuthor + "</p>");
+                out.println("<p><b>Price:</b> " + newPrice + "</p>");
+            } else {
+                out.println("<p style='color:red;'>Failed to insert new book.</p>");
+            }
+        }
+
+    } catch (Exception e) {
+        out.println("<p style='color:red;'>Error: " + e.getMessage() + "</p>");
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        out.println("<pre>" + sw.toString() + "</pre>");
+    } finally {
+        try { if (rs != null) rs.close(); } catch (Exception ex) {}
+        try { if (stmt != null) stmt.close(); } catch (Exception ex) {}
+        try { if (conn != null) conn.close(); } catch (Exception ex) {}
+    }
+}
+%>
+
+</body>
+</html>

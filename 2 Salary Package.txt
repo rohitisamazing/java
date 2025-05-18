@@ -1,0 +1,55 @@
+package employee;
+
+public class Emp {
+    public String name;
+    public int id;
+    public String type;
+    public double basic, hra, da, pf, tax, gross, net;
+
+    public Emp(String name, int id, String type, double basic) {
+        this.name = name;
+        this.id = id;
+        this.type = type;
+        this.basic = basic;
+    }
+
+    public void calc() {
+        hra = basic * 0.2;
+        da = basic * 0.1;
+        pf = basic * 0.12;
+        gross = basic + hra + da;
+        tax = gross * 0.1;
+        net = gross - pf - tax;
+    }
+
+    public void show() {
+        System.out.println("--- Employee Salary Details -----");
+        System.out.println("Name: " + name);
+        System.out.println("ID: " + id);
+        System.out.println("Type: " + type);
+        System.out.println("Basic Pay: " + basic);
+        System.out.println("HRA: " + hra);
+        System.out.println("DA: " + da);
+        System.out.println("PF: " + pf);
+        System.out.println("Tax: " + tax);
+        System.out.println("Gross Pay: " + gross);
+        System.out.println("Net Pay: " + net);
+    }
+}
+
+
+////////////////////
+
+
+
+package sal;
+
+import employee.Emp;
+
+public class Salary {
+    public static void main(String[] args) {
+        Emp e = new Emp("Ravi", 101, "Clerk", 30000);
+        e.calc();
+        e.show();
+    }
+}

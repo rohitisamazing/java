@@ -1,0 +1,107 @@
+package employee;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Form extends JFrame implements ActionListener {
+
+    JTextField nameField, emailField, phoneField;
+    JComboBox<String> courseBox;
+    JTextArea messageArea;
+    JButton submitBtn, clearBtn;
+
+    public Form() {
+        setTitle("Admission Enquiry Form");
+        setSize(400, 450);
+        setLayout(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Labels
+        JLabel heading = new JLabel("Admission Enquiry Form");
+        heading.setBounds(100, 10, 200, 30);
+        heading.setFont(new Font("Arial", Font.BOLD, 16));
+        add(heading);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(30, 60, 100, 25);
+        add(nameLabel);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(30, 100, 100, 25);
+        add(emailLabel);
+
+        JLabel phoneLabel = new JLabel("Phone:");
+        phoneLabel.setBounds(30, 140, 100, 25);
+        add(phoneLabel);
+
+        JLabel courseLabel = new JLabel("Course:");
+        courseLabel.setBounds(30, 180, 100, 25);
+        add(courseLabel);
+
+        JLabel messageLabel = new JLabel("Message:");
+        messageLabel.setBounds(30, 220, 100, 25);
+        add(messageLabel);
+
+        // Fields
+        nameField = new JTextField();
+        nameField.setBounds(140, 60, 200, 25);
+        add(nameField);
+
+        emailField = new JTextField();
+        emailField.setBounds(140, 100, 200, 25);
+        add(emailField);
+
+        phoneField = new JTextField();
+        phoneField.setBounds(140, 140, 200, 25);
+        add(phoneField);
+
+        String[] courses = {"MCA", "MBA", "BCA", "BBA", "B.Tech"};
+        courseBox = new JComboBox<>(courses);
+        courseBox.setBounds(140, 180, 200, 25);
+        add(courseBox);
+
+        messageArea = new JTextArea();
+        messageArea.setBounds(140, 220, 200, 70);
+        add(messageArea);
+
+        // Buttons
+        submitBtn = new JButton("Submit");
+        submitBtn.setBounds(70, 310, 100, 30);
+        submitBtn.addActionListener(this);
+        add(submitBtn);
+
+        clearBtn = new JButton("Clear");
+        clearBtn.setBounds(200, 310, 100, 30);
+        clearBtn.addActionListener(this);
+        add(clearBtn);
+
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitBtn) {
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String phone = phoneField.getText();
+            String course = (String) courseBox.getSelectedItem();
+            String msg = messageArea.getText();
+
+            JOptionPane.showMessageDialog(this,
+                "Submitted Successfully!\n\nDetails:\nName: " + name +
+                "\nEmail: " + email +
+                "\nPhone: " + phone +
+                "\nCourse: " + course +
+                "\nMessage: " + msg);
+        } else if (e.getSource() == clearBtn) {
+            nameField.setText("");
+            emailField.setText("");
+            phoneField.setText("");
+            messageArea.setText("");
+            courseBox.setSelectedIndex(0);
+        }
+    }
+
+    public static void main(String[] args) {
+        new Form();
+    }
+}

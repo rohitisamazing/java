@@ -1,0 +1,152 @@
+package employee;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Find extends JFrame implements ActionListener {
+
+    JRadioButton rbCircle, rbRectangle, rbSquare;
+    JCheckBox cbArea, cbPeri, cbCirc;
+    JTextField tfRadius, tfLength, tfBreadth, tfSide;
+    JButton btnCalc, btnExit;
+    JPanel shapePanel, optionPanel, inputPanel;
+
+    public Find() {
+        setTitle("Find Area App");
+        setSize(400, 400);
+        setLayout(new FlowLayout());
+
+        // --- Shape Selection Panel ---
+        shapePanel = new JPanel();
+        rbCircle = new JRadioButton("Circle");
+        rbRectangle = new JRadioButton("Rectangle");
+        rbSquare = new JRadioButton("Square");
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rbCircle);
+        bg.add(rbRectangle);
+        bg.add(rbSquare);
+
+        shapePanel.setBorder(BorderFactory.createTitledBorder("Choose Shape"));
+        shapePanel.add(rbCircle);
+        shapePanel.add(rbRectangle);
+        shapePanel.add(rbSquare);
+        add(shapePanel);
+
+        // --- Options Panel ---
+        optionPanel = new JPanel();
+        cbArea = new JCheckBox("Area");
+        cbPeri = new JCheckBox("Perimeter");
+        cbCirc = new JCheckBox("Circumference");
+
+        optionPanel.setBorder(BorderFactory.createTitledBorder("Choose Operation"));
+        optionPanel.add(cbArea);
+        optionPanel.add(cbPeri);
+        optionPanel.add(cbCirc);
+        add(optionPanel);
+
+        // --- Input Panel ---
+        inputPanel = new JPanel(new GridLayout(4, 2));
+        tfRadius = new JTextField(10);
+        tfLength = new JTextField(10);
+        tfBreadth = new JTextField(10);
+        tfSide = new JTextField(10);
+
+        inputPanel.add(new JLabel("Radius:"));
+        inputPanel.add(tfRadius);
+        inputPanel.add(new JLabel("Length:"));
+        inputPanel.add(tfLength);
+        inputPanel.add(new JLabel("Breadth:"));
+        inputPanel.add(tfBreadth);
+        inputPanel.add(new JLabel("Side:"));
+        inputPanel.add(tfSide);
+        add(inputPanel);
+
+        // --- Buttons ---
+        btnCalc = new JButton("Calculate");
+        btnExit = new JButton("Exit");
+        add(btnCalc);
+        add(btnExit);
+
+        // --- Hide Inputs Initially ---
+        tfRadius.setVisible(false);
+        tfLength.setVisible(false);
+        tfBreadth.setVisible(false);
+        tfSide.setVisible(false);
+
+        // --- Action Listeners ---
+        rbCircle.addActionListener(this);
+        rbRectangle.addActionListener(this);
+        rbSquare.addActionListener(this);
+        btnCalc.addActionListener(this);
+        btnExit.addActionListener(this);
+
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == rbCircle) {
+            tfRadius.setVisible(true);
+            tfLength.setVisible(false);
+            tfBreadth.setVisible(false);
+            tfSide.setVisible(false);
+            cbArea.setVisible(true);
+            cbCirc.setVisible(true);
+            cbPeri.setVisible(false);
+        } else if (e.getSource() == rbRectangle) {
+            tfRadius.setVisible(false);
+            tfLength.setVisible(true);
+            tfBreadth.setVisible(true);
+            tfSide.setVisible(false);
+            cbArea.setVisible(true);
+            cbCirc.setVisible(false);
+            cbPeri.setVisible(true);
+        } else if (e.getSource() == rbSquare) {
+            tfRadius.setVisible(false);
+            tfLength.setVisible(false);
+            tfBreadth.setVisible(false);
+            tfSide.setVisible(true);
+            cbArea.setVisible(true);
+            cbCirc.setVisible(false);
+            cbPeri.setVisible(true);
+        } else if (e.getSource() == btnCalc) {
+            try {
+                if (rbCircle.isSelected()) {
+                    double r = Double.parseDouble(tfRadius.getText());
+                    if (cbArea.isSelected())
+                        JOptionPane.showMessageDialog(this, "Area: " + (Math.PI * r * r));
+                    if (cbCirc.isSelected())
+                        JOptionPane.showMessageDialog(this, "Circumference: " + (2 * Math.PI * r));
+                } else if (rbRectangle.isSelected()) {
+                    double l = Double.parseDouble(tfLength.getText());
+                    double b = Double.parseDouble(tfBreadth.getText());
+                    if (cbArea.isSelected())
+                        JOptionPane.showMessageDialog(this, "Area: " + (l * b));
+                    if (cbPeri.isSelected())
+                        JOptionPane.showMessageDialog(this, "Perimeter: " + (2 * (l + b)));
+                } else if (rbSquare.isSelected()) {
+                    double s = Double.parseDouble(tfSide.getText());
+                    if (cbArea.isSelected())
+                        JOptionPane.showMessageDialog(this, "Area: " + (s * s));
+                    if (cbPeri.isSelected())
+                        JOptionPane.showMessageDialog(this, "Perimeter: " + (4 * s));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Please select a shape.");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid input!");
+            }
+        } else if (e.getSource() == btnExit) {
+            System.exit(0);
+        }
+
+        // Refresh the UI
+        validate();
+        repaint();
+    }
+
+    public static void main(String[] args) {
+        new Find();
+    }
+}

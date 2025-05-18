@@ -1,0 +1,55 @@
+package DataEntry;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+@WebServlet("/DataEntryServlet")
+public class DataEntryServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        out.println("<html>");
+        out.println("<head><title>Student Data Entry</title></head>");
+        out.println("<body>");
+        out.println("<h2>Enter Student Details</h2>");
+        out.println("<form method='post' action='DataEntryServlet'>");
+        out.println("Name: <input type='text' name='name' required><br><br>");
+        out.println("Standard: ");
+        out.println("<select name='standard'>");
+        out.println("<option value='1st'>1st</option>");
+        out.println("<option value='2nd'>2nd</option>");
+        out.println("<option value='3rd'>3rd</option>");
+        out.println("<option value='4th'>4th</option>");
+        out.println("<option value='5th'>5th</option>");
+        out.println("</select><br><br>");
+        out.println("<input type='submit' value='Add'>");
+        out.println("</form>");
+        out.println("</body></html>");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String name = request.getParameter("name");
+        String standard = request.getParameter("standard");
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        out.println("<html><body>");
+        out.println("<h2>Student Details Submitted</h2>");
+        out.println("Name: " + name + "<br>");
+        out.println("Standard: " + standard + "<br>");
+        out.println("</body></html>");
+    }
+}

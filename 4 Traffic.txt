@@ -1,0 +1,58 @@
+package employee;
+public class Traffic {
+    public static void main(String[] args) throws InterruptedException {
+        String[] lights = {"Red", "Yellow", "Green"};
+        while (true) {
+            for (String light : lights) {
+                System.out.println(light + " Light");
+                Thread.sleep(1000); // 1 second delay
+            }
+        }
+    }
+}
+
+
+
+
+
+////////////////////////////////////////////////////
+
+
+package employee;
+
+
+public class Traffic {
+
+   
+
+    public static void main(String[] args) {
+        // Loop to simulate the traffic light signal
+        while (true) {
+            // Red Light
+            System.out.println("Red");
+            try {
+                Thread.sleep(3000); // 3 seconds delay for Red light
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Green Light
+            System.out.println("Green");
+            try {
+                Thread.sleep(5000); // 5 seconds delay for Green light
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Yellow Light
+            System.out.println("Yellow");
+            try {
+                Thread.sleep(2000); // 2 seconds delay for Yellow light
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
