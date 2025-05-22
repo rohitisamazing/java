@@ -84,3 +84,27 @@ if (id != null && !id.trim().isEmpty()) {
 
 </body>
 </html>
+
+
+
+
+////////////////////////////////////////
+
+
+CREATE TABLE book (
+    id VARCHAR2(10) PRIMARY KEY,
+    title VARCHAR2(100),
+    author VARCHAR2(100),
+    price NUMBER(10, 2)
+);
+
+
+
+INSERT INTO book (id, title, author, price) 
+VALUES ('B001', 'The Java Handbook', 'Patrick Naughton', 399.50);
+
+INSERT INTO book (id, title, author, price) 
+VALUES ('B002', 'Learning JSP', 'John Doe', 299.00);
+
+INSERT INTO book (id, title, author, price) 
+VALUES ('B003', 'Database Systems', 'C.J. Date', 450.75);
