@@ -108,3 +108,11 @@ VALUES ('B002', 'Learning JSP', 'John Doe', 299.00);
 
 INSERT INTO book (id, title, author, price) 
 VALUES ('B003', 'Database Systems', 'C.J. Date', 450.75);
+
+
+Place the JAR in Tomcat’s lib directory:
+
+Copy the JAR to:
+TOMCAT_HOME/lib/
+
+Example: C:/apache-tomcat-10.1.41/lib/ojdbc8.jar
